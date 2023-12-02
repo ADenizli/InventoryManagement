@@ -19,4 +19,7 @@ public:
     bool NewRegistration(User user);
     bool Login(User user);
     bool isAuthorized();
+    void UserList();
+    User FetchUser(int i);
+    void EditUser(int i, std::string newUsername, std::string newPassword);
 };
