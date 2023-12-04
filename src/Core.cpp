@@ -160,7 +160,7 @@ class Core {
         switch (selection)
         {
         case 1:
-            /* code */
+            
             break;
         
         case 2:
