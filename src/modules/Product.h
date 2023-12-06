@@ -17,4 +17,6 @@ class ProductModule {
         bool EditProduct(int index, Product product) ;
 
         void ListOfProducts();
+
+        Product GetProductByIndex(int index);
 };

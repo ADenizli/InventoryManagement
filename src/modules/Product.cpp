@@ -24,8 +24,13 @@ bool ProductModule::EditProduct(int index, Product product) {
 }
 
 void ProductModule::ListOfProducts() {
+    std::cout << "Index | Title" << std::endl;
     for (size_t i = 0; i < this->totalProductCount; i++)
     {
         std::cout << "ID: " << i << "Product Title: " << products[i].title << std::endl;
     };
+}
+
+Product ProductModule::GetProductByIndex(int index) {
+    return this->products[index];
 }

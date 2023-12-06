@@ -2,10 +2,15 @@
 
 // OWN MODULES
 #include "modules/User.h"
+#include "modules/Product.h"
+#include "modules/Inventory.h"
 
 class Core {
     private:
     UserModule userModule;
+    ProductModule productModule;
+    InventoryModule inventoryModule;
+
 
     public: 
     void CheckAuth() {
@@ -18,6 +23,7 @@ class Core {
     }
 
     void Ignition() {
+        this->inventoryModule.Initialize(this->productModule);
         std::cout << "Welcome to Inventory Module" << std::endl;
         std::cout << "===========================" << std::endl;
     }
@@ -156,27 +162,182 @@ class Core {
         std::cout << "6 - User List & Edit" << std::endl;
         std::cout << "7 - Logout" << std::endl;
         std::cin >> selection;
+        std::string userInput;
 
         switch (selection)
         {
         case 1:
-            
+            std::cout << "=======CREATE PRODUCT========" << std::endl;
+            std::cout << "Enter an title for new product creation!" << std::endl;
+            std::cout << "=============================" << std::endl;
+            std::cin >> userInput;
+            bool response = this->productModule.CreateProduct(Product {title: userInput});
+            if (response)
+            {
+                std::cout << "=============================" << std::endl;
+                std::cout << "Creation successfully, returning to the menu!" << std::endl;
+                std::cout << "=============================" << std::endl;
+            } else {
+                std::cout << "=============================" << std::endl;
+                std::cout << "You have reached maximum capacity, returning to the menu!" << std::endl;
+                std::cout << "=============================" << std::endl;
+            }
+            this->MenuCLI();
             break;
         
         case 2:
-            /* code */
+            int subMenu;
+            std::cout << "=======PRODUCT LIST========" << std::endl;
+            this->productModule.ListOfProducts();
+            std::cout << "=============================" << std::endl;
+            std::cout << "To edit product write index, to return menu write 99" << std::endl;
+            std::cout << "=============================" << std::endl;
+            std::cin >> subMenu;
+            switch (subMenu)
+            {
+            case 99:
+                this->MenuCLI();
+                break;
+            
+            default:
+                while (!(0 <= subMenu <= 9))
+                {
+                    std::cout << "Entered undefined index! Type defined one!" << std::endl;
+                    std::cin >> subMenu;
+                    if (subMenu == 99)
+                    {
+                        this->MenuCLI();
+                    }
+                    
+                }
+                std::string editedProduct;
+                std::cout << "=============================" << std::endl;
+                std::cout << "Enter New Product Title!" << std::endl;
+                std::cout << "=============================" << std::endl;
+                std::cin >> editedProduct;
+                bool response = this->productModule.EditProduct(subMenu, Product {title: editedProduct});
+                if (response)
+                {
+                    std::cout << "=============================" << std::endl;
+                    std::cout << "Product Updated Successfully!" << std::endl;
+                    std::cout << "Returning to the menu!" << std::endl;
+                    std::cout << "============================  =" << std::endl;
+                    this->MenuCLI();
+                } else {
+                    std::cout << "============ !!! =============" << std::endl;
+                    std::cout << "Something went wrong!" << std::endl;
+                    std::cout << "Returning to the menu!" << std::endl;
+                    std::cout << "============ !!! =============" << std::endl;
+                    this->MenuCLI(); 
+                }
+                break;
+            }
             break;
         
         case 3:
-            /* code */
+            int subMenu;
+            std::cout << "=======PRODUCT LIST========" << std::endl;
+            this->productModule.ListOfProducts();
+            std::cout << "=============================" << std::endl;
+            std::cout << "To new incoming product write index, to return menu write 99" << std::endl;
+            std::cout << "=============================" << std::endl;
+            std::cin >> subMenu;
+            switch (subMenu)
+            {
+                case 99:
+                    this->MenuCLI();
+                    break;
+                
+                default:
+                    while (!(0 <= subMenu <= 9))
+                    {
+                        std::cout << "Entered undefined index! Type defined one!" << std::endl;
+                        std::cin >> subMenu;
+                        if (subMenu == 99)
+                        {
+                            this->MenuCLI();
+                        }
+                        
+                    }
+                    int enteredAmount;
+                    std::cout << "=============================" << std::endl;
+                    std::cout << "Enter amount of incoming!" << std::endl;
+                    std::cout << "============================  =" << std::endl;
+                    std::cin >> enteredAmount;
+                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct {type: Inbound, productID: subMenu, amount: enteredAmount });
+                    if (response)
+                    {
+                        std::cout << "=============================" << std::endl;
+                        std::cout << "Incoming setted successfully!" << std::endl;
+                        std::cout << "Returning to the menu!" << std::endl;
+                        std::cout << "============================  =" << std::endl;
+                        this->MenuCLI();
+                    } else {
+                        std::cout << "============ !!! =============" << std::endl;
+                        std::cout << "Overflow in capacity!" << std::endl;
+                        std::cout << "Returning to the menu!" << std::endl;
+                        std::cout << "============ !!! =============" << std::endl;
+                        this->MenuCLI(); 
+                    }
+                    break;
+            }
             break;
         
         case 4:
-            /* code */
+            int subMenu;
+            std::cout << "=======PRODUCT LIST========" << std::endl;
+            this->productModule.ListOfProducts();
+            std::cout << "=============================" << std::endl;
+            std::cout << "To new outbound product write index, to return menu write 99" << std::endl;
+            std::cout << "=============================" << std::endl;
+            std::cin >> subMenu;
+            switch (subMenu)
+            {
+                case 99:
+                    this->MenuCLI();
+                    break;
+                
+                default:
+                    while (!(0 <= subMenu <= 9))
+                    {
+                        std::cout << "Entered undefined index! Type defined one!" << std::endl;
+                        std::cin >> subMenu;
+                        if (subMenu == 99)
+                        {
+                            this->MenuCLI();
+                        }
+                        
+                    }
+                    int enteredAmount;
+                    std::cout << "=============================" << std::endl;
+                    std::cout << "Enter amount of outbound!" << std::endl;
+                    std::cout << "============================  =" << std::endl;
+                    std::cin >> enteredAmount;
+                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct {type: Outbound, productID: subMenu, amount: enteredAmount });
+                    if (response)
+                    {
+                        std::cout << "=============================" << std::endl;
+                        std::cout << "outbound setted successfully!" << std::endl;
+                        std::cout << "Returning to the menu!" << std::endl;
+                        std::cout << "=============================" << std::endl;
+                        this->MenuCLI();
+                    } else {
+                        std::cout << "============ !!! =============" << std::endl;
+                        std::cout << "You set a value that higher than capacity!" << std::endl;
+                        std::cout << "Returning to the menu!" << std::endl;
+                        std::cout << "============ !!! =============" << std::endl;
+                        this->MenuCLI(); 
+                    }
+                    break;
+            }
             break;
         
         case 5:
-            /* code */
+            std::cout << "=============================" << std::endl;
+            std::cout << "===== INVENTORY STATUS ======" << std::endl;
+            std::cout << "=============================" << std::endl;
+            this->inventoryModule.ReturnInventory();
+            this->MenuCLI();
             break;
         
         case 6:
@@ -184,7 +345,7 @@ class Core {
         default:
             break;
         }
-    }
+    };
 };
 
 int main() {
