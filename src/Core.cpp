@@ -66,7 +66,7 @@ class Core {
         std::cout << "===========================" << std::endl;
         std::cin >> password;
         
-        bool response = this->userModule.Login({username: username, password: password});
+        bool response = this->userModule.Login({username, password});
 
         if (response)
         {
@@ -88,7 +88,7 @@ class Core {
         std::cout << "===========================" << std::endl;
         std::cin >> password;
         
-        bool response = this->userModule.NewRegistration({username: username, password: password});
+        bool response = this->userModule.NewRegistration({username, password});
 
         if (response)
         {
@@ -150,6 +150,7 @@ class Core {
 
     void MenuCLI() {
         int selection;
+        int subMenu;
         this->CheckAuth();
         std::cout << "===========================" << std::endl;
         std::cout << "Please choose a selection below!" << std::endl;
@@ -167,11 +168,11 @@ class Core {
         switch (selection)
         {
         case 1:
-            std::cout << "=======CREATE PRODUCT========" << std::endl;
+            {std::cout << "=======CREATE PRODUCT========" << std::endl;
             std::cout << "Enter an title for new product creation!" << std::endl;
             std::cout << "=============================" << std::endl;
             std::cin >> userInput;
-            bool response = this->productModule.CreateProduct(Product {title: userInput});
+            bool response = this->productModule.CreateProduct(Product {userInput});
             if (response)
             {
                 std::cout << "=============================" << std::endl;
@@ -183,11 +184,10 @@ class Core {
                 std::cout << "=============================" << std::endl;
             }
             this->MenuCLI();
-            break;
+            break;}
         
         case 2:
-            int subMenu;
-            std::cout << "=======PRODUCT LIST========" << std::endl;
+            {std::cout << "=======PRODUCT LIST========" << std::endl;
             this->productModule.ListOfProducts();
             std::cout << "=============================" << std::endl;
             std::cout << "To edit product write index, to return menu write 99" << std::endl;
@@ -200,7 +200,7 @@ class Core {
                 break;
             
             default:
-                while (!(0 <= subMenu <= 9))
+                while (!(0 <= subMenu && subMenu <= 9))
                 {
                     std::cout << "Entered undefined index! Type defined one!" << std::endl;
                     std::cin >> subMenu;
@@ -215,7 +215,7 @@ class Core {
                 std::cout << "Enter New Product Title!" << std::endl;
                 std::cout << "=============================" << std::endl;
                 std::cin >> editedProduct;
-                bool response = this->productModule.EditProduct(subMenu, Product {title: editedProduct});
+                bool response = this->productModule.EditProduct(subMenu, Product { editedProduct});
                 if (response)
                 {
                     std::cout << "=============================" << std::endl;
@@ -231,12 +231,11 @@ class Core {
                     this->MenuCLI(); 
                 }
                 break;
-            }
-            break;
+            };
+            break;}
         
         case 3:
-            int subMenu;
-            std::cout << "=======PRODUCT LIST========" << std::endl;
+            {std::cout << "=======PRODUCT LIST========" << std::endl;
             this->productModule.ListOfProducts();
             std::cout << "=============================" << std::endl;
             std::cout << "To new incoming product write index, to return menu write 99" << std::endl;
@@ -245,11 +244,11 @@ class Core {
             switch (subMenu)
             {
                 case 99:
-                    this->MenuCLI();
+                    {this->MenuCLI();
                     break;
-                
+                }
                 default:
-                    while (!(0 <= subMenu <= 9))
+                    {while (!(0 <= subMenu && subMenu <= 9))
                     {
                         std::cout << "Entered undefined index! Type defined one!" << std::endl;
                         std::cin >> subMenu;
@@ -264,7 +263,7 @@ class Core {
                     std::cout << "Enter amount of incoming!" << std::endl;
                     std::cout << "============================  =" << std::endl;
                     std::cin >> enteredAmount;
-                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct {type: Inbound, productID: subMenu, amount: enteredAmount });
+                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct {Inbound, subMenu, enteredAmount });
                     if (response)
                     {
                         std::cout << "=============================" << std::endl;
@@ -279,13 +278,12 @@ class Core {
                         std::cout << "============ !!! =============" << std::endl;
                         this->MenuCLI(); 
                     }
-                    break;
-            }
-            break;
+                    break;}
+            };
+            break;}
         
         case 4:
-            int subMenu;
-            std::cout << "=======PRODUCT LIST========" << std::endl;
+            {std::cout << "=======PRODUCT LIST========" << std::endl;
             this->productModule.ListOfProducts();
             std::cout << "=============================" << std::endl;
             std::cout << "To new outbound product write index, to return menu write 99" << std::endl;
@@ -298,7 +296,7 @@ class Core {
                     break;
                 
                 default:
-                    while (!(0 <= subMenu <= 9))
+                    while (!(0 <= subMenu && subMenu <= 9))
                     {
                         std::cout << "Entered undefined index! Type defined one!" << std::endl;
                         std::cin >> subMenu;
@@ -313,7 +311,7 @@ class Core {
                     std::cout << "Enter amount of outbound!" << std::endl;
                     std::cout << "============================  =" << std::endl;
                     std::cin >> enteredAmount;
-                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct {type: Outbound, productID: subMenu, amount: enteredAmount });
+                    bool response = this->inventoryModule.InventoryAction(InventoryActionStruct { Outbound, subMenu, enteredAmount });
                     if (response)
                     {
                         std::cout << "=============================" << std::endl;
@@ -330,18 +328,15 @@ class Core {
                     }
                     break;
             }
-            break;
+            break;}
         
         case 5:
-            std::cout << "=============================" << std::endl;
+           { std::cout << "=============================" << std::endl;
             std::cout << "===== INVENTORY STATUS ======" << std::endl;
             std::cout << "=============================" << std::endl;
             this->inventoryModule.ReturnInventory();
             this->MenuCLI();
-            break;
-        
-        case 6:
-            break;
+            break;}
         default:
             break;
         }

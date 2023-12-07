@@ -5,7 +5,7 @@ bool InventoryModule::InventoryAction(InventoryActionStruct inventoryAction) {
     switch (inventoryAction.type)
     {
     case Outbound:
-        if (0 <= inventoryAction.productID <= 9 && this->InventoryItem[inventoryAction.productID] >= inventoryAction.amount)
+        if (0 <= inventoryAction.productID && inventoryAction.productID <= 9 && this->InventoryItem[inventoryAction.productID] >= inventoryAction.amount)
         {
             this->InventoryItem[inventoryAction.productID] = this->InventoryItem[inventoryAction.productID] - inventoryAction.amount;
             return true;
@@ -14,7 +14,7 @@ bool InventoryModule::InventoryAction(InventoryActionStruct inventoryAction) {
         
         break;
     case Inbound:
-        if (0 <= inventoryAction.productID <= 9 && this->InventoryItem[inventoryAction.productID]  + inventoryAction.amount <= this->overCapacityPerProduct)
+        if (0 <= inventoryAction.productID && inventoryAction.productID <= 9 && this->InventoryItem[inventoryAction.productID]  + inventoryAction.amount <= this->overCapacityPerProduct)
         {
             this->InventoryItem[inventoryAction.productID] = this->InventoryItem[inventoryAction.productID] + inventoryAction.amount;
             return true;
@@ -32,7 +32,7 @@ void InventoryModule::ReturnInventory() {
     std::cout << "Inventory Index | Inventory Item | Amount" << std::endl;
     for (size_t i = 0; i < 10; i++)
     {
-        std::cout << i << this->productModule.GetProductByIndex(i).title << this->InventoryItem[i] << std::endl;
+        std::cout << i << this->productModule.GetProductByIndex(i).title << " | " << this->InventoryItem[i] << std::endl;
     }
 };
 
